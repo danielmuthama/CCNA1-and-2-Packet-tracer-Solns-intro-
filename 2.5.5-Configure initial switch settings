@@ -1,0 +1,113 @@
+*************2.5.5-packet-tracer---configure-initial-switch-settings***********
+
+Part 1: Verify the Default Switch Configuration
+===============================================
+
+enable 		#to enter privileged EXEC mode
+sh running-config	#To display the running configuration
+
+*How many Fast Ethernet interfaces does the switch have?
+24.FastEthernet0/1 to FastEthernet0/24.
+
+*How many Gigabit Ethernet interfaces does the switch have?
+2. GigabitEthernet0/1 and GigabitEthernet0/2.
+
+What is the range of values shown for the vty lines?
+0-15
+
+*Which command will display the current contents of non-volatile random-access memory (NVRAM)?
+show startup-config
+
+*Why does the switch respond with “startup-config is not present?”
+Because there is no saved configuration , we can do that with the command " coppy running-config startup-config".
+
+Part 2: Create a Basic Switch Configuration
+===========================================
+
+configure terminal		#To enter configuration mode
+hostname S1			#To configure the switch name
+exit 				#To go back to privileged EXEC mode
+
+configure terminal		#To enter configuration mode
+line console 0			#To identify the line for configuration
+password letmein		#To set the password for line console 0
+login				#To enable login
+exit				#To go back to configuration mode
+exit				#To go back to privileged EXEC mode
+exit 				#To exit privileged EXEC mode
+exit 				#To log out the switch
+
+<enter>			#To re-enter the switch, you will be asked for the line con 0 password : letmein
+
+enable 			#to enter privileged EXEC mode
+configure terminal		#To enter configuration mode
+enable password c1$c0		#To set a password to protect access to privileged mode
+exit				#To go back to privileged EXEC mode
+
+*Step 5
+exit 				#To log out the switch
+<enter>			#To re-enter the switch, you will be asked for the line con 0 password : letmein
+
+enable 			#to enter privileged EXEC mode,you will be asked for the password : c1$c0
+show running-config		#To display the running configuration. You will see the passwords in plain text.
+
+*Step 6
+conf t				#To enter configuration mode. Short for "configure terminal"
+enable secret itsasecret	#To configure an encrypted password for secure access to privileged mode
+exit				#To exit configuration mode
+
+*Step 7
+sh run				#To display the running configuration.Short for "show running-config"
+
+*Step 8
+conf t				#To enter configuration mode. Short for "configure terminal"
+service password-encryption	#To encrypt plain text passwords
+exit 				#To exit configuration mode
+
+Part 3: Configure a MOTD Banner
+===============================
+conf t				#To enter configuration mode. Short for "configure terminal"
+banner motd "This ... Only!"	#To configure a warning message that displays when an user tries to log in
+exit				#To exit configuration mode
+
+Part 4: Save and Verify Configuration Files to NVRAM
+====================================================
+copy running-config startup-config # To back up the running configuration file to NVRAM 
+
+*What is the shortest, abbreviated version of the copy running-config startup-config command?
+cop ru st
+
+*Which command will display the contents of NVRAM?
+sh startup-config
+
+Part 5: Configure S2
+====================
+en				#to enter privileged EXEC mode.Short for "enable"
+conf t				#To enter configuration mode.Short for "configure terminal"
+hostname S2			#To configure the switch name.
+
+line console 0			#To identify the line for configuration
+password letmein		#To set the password for line console 0
+login				#To enable login
+exit				#To go back to configuration mode
+
+enable password c1$c0		#To set a password to protect access to privileged mode
+
+enable secret itsasecret	#To configure an encrypted password.
+
+banner motd "This ... Only!"	#To configure an appropriate message motd
+
+service password-encryption	#To encrypt plain text passwords
+
+sh run				#To ensure that the configuration is correct.
+
+copy running-config startup-config #To back up the running configuration file to NVRAM 
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,130 @@
+*************10.4.3-packet-tracer---basic-device-configuration*************
+
+Addressing table
+================
+______________________________________________________________________							
+Device		|Interface	|IP address		|Default Gateway
+----------------------------------------------------------------------
+RTA		|     G0/0	|128.107.20.1/24	|N/A
+		|		|2001:db8:a::1/64	|
+		|		|fe80::1		|
+		--------------------------------------------------	
+		|    G0/1	|128.107.30.1/24	|N/A
+		|		|2001:db8:b::1/64	|
+		|		|fe80::1		|
+		---------------------------------------------------	
+ASW-1		|    Vlan 1	|128.107.30.15/24	|128.107.20.1
+------------------------------------------------------------------
+ASW-2		|    Vlan 1	|128.107.30.15/24	|128.107.30.1
+-----------------------------------------------------------------
+User-01	|	NIC	|128.107.20.25/24	|128.107.20.1
+				|-----------------------------------
+		|		|2001:db8:a::2/64	|fe80::1
+------------------------------------------------------------------		
+User-02	|	NIC	|128.107.20.30/24	|128.107.20.1
+				-----------------------------------
+		|		|2001:db8:a::3/64	|fe80::1
+------------------------------------------------------------------
+User-03	|	NIC	|128.107.30.25/24	|128.107.30.1
+				-----------------------------------
+		|		|2001:db8:b::2/64	|fe80::1
+------------------------------------------------------------------
+User-04	|	NIC	|128.107.30.30/24	|128.107.30.1
+				|----------------------------------
+				|2001:db8:b::3/64	|fe80::1
+------------------------------------------------------------------
+
+#Use the addressing table to configure the interfaces. There are 3 possible topologies but they follow the same logic , make the necessary changes to the addressing scheme.
+
+User configuration
+==================
+#Click on the PC,go to Desktop>IP configuration
+
+*User-01
+Ip address 	:128.107.20.25
+subnet mask	:255.255.255.0
+Default gateway :128.107.20.1
+
+ipv6 address	:2001:db8:a::2/64
+ipv6 gateway	:fe80::1
+
+#Do the same for the other 3 users
+
+Router configuration
+====================
+en					#to enter privileged EXEC mode.Short for "enable"
+conf t					#To enter configuration mode.Short for "configure terminal"
+hostname RTA				#To configure the device name
+
+line console 0				#To specify the line console 0 for configuration
+password cisco				#To set the password
+login					#To enable login
+
+line vty 0 15				#To specify the vty from 0 to 15 for configuration
+password cisco				#To set the password
+login					#To enable login
+
+line aux 0				#To specify the aux 0 for configuration
+password cisco				#To set the password
+login					#To enable login
+
+enable secret class			#To configure an encrypted password for secure access to privileged mode
+service password-encryption		#To encrypt plain text passwords
+banner motd #Autorized access only#	#To configure a warning message that displays when an user tries to log in
+
+ipv6 unicast-routing			#To globally enable IPv6 routing on the router
+
+int g0/0				#To enter interface configuration mode
+description Link to Switch 1		#To add a description to the interface
+ip address 128.107.20.1 255.255.255.0	#To configure the ipv4 address
+ipv6 address 2001:db8:a::1/64		#To configure an ipv6 global address
+ipv6 address fe80::1 link-local 	#To configure an ipv6 link-local address
+no sh					#To turn on the interface
+
+int g0/1				#Same as interface g0/0
+description Link to Switch 2
+ip address 128.107.30.1 255.255.255.0
+ipv6 address 2001:db8:b::1/64
+ipv6 address fe80::1 link-local 
+no sh
+
+exit
+exit
+
+copy running-config startup-config	#To back up the running configuration file to NVRAM 
+
+
+exit
+
+Switch configuration
+====================
+en 
+conf t
+hostname ASw-2
+
+line console 0
+password cisco
+login
+
+line vty 0 4
+password cisco
+login
+
+line aux 0
+password cisco
+login
+
+enable secret class
+service password-encryption
+banner motd #Authorized access only!#
+
+int Vlan 1				#To enter the Interface Configuration context for Vlan 1
+description vlan interface		
+ip address 128.107.30.15 255.255.255.0#To add a description to the interface
+no sh				       #To turn on the interface
+		
+ip default-gateway 128.107.30.1	#To configure the default gateway
+
+copy running-config startup-config	#To back up the running configuration file to NVRAM 
+
+exit

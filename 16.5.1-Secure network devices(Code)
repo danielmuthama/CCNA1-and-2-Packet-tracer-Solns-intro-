@@ -1,0 +1,72 @@
+*****************16.5.1-packet-tracer---secure-network-devices*****************
+
+
+Router RTR-A configuration
+==========================
+en
+conf t
+
+no ip domain-lookup
+hostname RTR-A
+security password min-length 10
+
+line console 0
+password @Cons1234!
+login
+exec-timeout 7
+
+line vty 0 4
+exec-timeout 7
+transport input ssh
+login local
+exit
+
+enable secret @Cons1234!
+banner motd #Authorized access only#
+service password-encryption
+
+username NETadmin secret LogAdmin!9
+ip domain-name security.com
+login block-for 45 attempts 3 within 100
+
+crypto key generate rsa
+
+1024
+
+exit
+
+Switch SW-1 configuration
+=========================
+en 
+conf t 
+hostname SW-1
+
+int VLAN1
+ip address 192.168.1.254 255.255.255.0
+no sh
+exit
+
+
+int range F0/3-9,F0/11-24,F0/1, G0/2
+sh
+exit
+
+service password-encryption
+enable secret @Cons1234!
+
+username NETadmin secret LogAdmin!9
+ip domain-name security.com
+
+line vty 0 15
+exec-timeout 7
+transport input ssh
+login local
+exit
+
+ip default-gateway 192.168.1.1
+
+crypto key generate rsa
+
+1024
+
+exit

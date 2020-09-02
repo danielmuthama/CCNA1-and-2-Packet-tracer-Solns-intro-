@@ -1,0 +1,166 @@
+******************17.8.2-packet-tracer---skills-integration-challenge******************
+
+Ipv4 adressing scheme
+=====================
+
+Staff 100 users	:192.168.0.0/25
+Sales 50 users 	:192.168.0.128/26
+IT 25 users 		:192.168.0.192/27
+Guest 25 users 	:192.168.1.0/27
+
+Router 1 configuration
+======================
+en 					#To enter privileged EXEC mode.Short for"enable"						
+conf 					#To enter configuration mode.Short for "configure terminal"
+hostname R1				#To configure the device name
+
+no ip domain-lookup			#To stop the devicce from querying dns for typo.
+enable secret Ciscoenpa55		#To configure an encrypted password for secure access to privileged mode
+
+line console 0				#To enter line configuration mode
+password  Ciscoconpa55			#To set the password
+login					#To enable login
+exec-timeout 5				#To set the EXEC mode timeout to 5 minutes 
+exit
+
+security password min-length 10	#To require min password lenght, 10 characters 
+service password-encryption		#To encrypt plain text passwords in the device configuration file
+banner motd #Authorized access only#	#To configure a warning message that displays when an user tries to log in
+ipv6 unicast-routing			#To enable ipv6 routing
+
+int G0/0				#To enter interface configuration mode
+ipv6 address fe80::1  link-local	#To configure an ipv6 link-local address
+ipv6 address 2001:db8:acad::1/64	#To configure an ipv6 global address
+ip address 192.168.0.1 255.255.255.128#To configure the ipv4 address
+no sh					#To turn on the interface
+exit 
+
+int G0/1
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:acad:1::1/64
+ip address 192.168.0.129 255.255.255.192
+no sh
+exit 
+
+int G0/2
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:acad:2::1/64
+ip address 192.168.0.193 255.255.255.224
+no sh
+exit 
+
+int s0/0/1
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:2::1/64
+ip address 172.16.1.2 255.255.255.252
+no sh
+exit 
+
+ip domain-name CCNA-lab.com			#To configure a domain name
+crypto key generate rsa 			#To generate Rivest, Shamir, and Adelman (RSA) key pairs
+
+1024						#To specify the size of the key modulus
+
+
+line vty 0 4					#To enter line configuration mode
+transport input ssh				#To specify SSH for inbound connections to the router
+login local					#To use the local user profiles for authentication.
+exec-timeout 5					#To set the EXEC mode timeout to 5 minutes
+exit 
+
+username Admin1 secret Admin1pa55		#To set the username and password for SSH 
+login block-for 180 attempts 4 within 120	#To block anyone for 180 seconds who fails to log in after 4 attempts within a 120 seconds period
+
+exit
+
+Switch 1 configuration
+======================
+en 
+conf t
+hostname S1
+
+int Vlan1 
+ip address 192.168.0.2 255.255.255.128
+no sh
+exit
+
+ip default-gateway 192.168.0.1
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+line vty 0 15
+password  Ciscoconpa55
+login 
+exec-timeout 5
+exit 
+
+service password-encryption 
+
+exit
+
+Switch 2 configuration
+======================
+en 
+conf t
+hostname S2
+
+int Vlan1 
+ip address 192.168.0.130 255.255.255.192
+no sh
+exit
+
+ip default-gateway 192.168.0.129
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+line vty 0 15
+password  Ciscoconpa55
+login 
+exec-timeout 5
+exit 
+
+service password-encryption 
+
+Switch 3 configuration
+======================
+en 
+conf t
+hostname S3
+
+service password-encryption 
+
+int Vlan1 
+ip address 192.168.0.194 255.255.255.224
+no sh
+exit
+
+ip default-gateway 192.168.0.193 
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+line vty 0 15
+password  Ciscoconpa55
+login 
+exec-timeout 5
+exit 
+
+exit
+

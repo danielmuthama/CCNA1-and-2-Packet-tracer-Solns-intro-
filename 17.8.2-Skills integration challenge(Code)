@@ -1,0 +1,164 @@
+******************17.8.2-packet-tracer---skills-integration-challenge******************
+
+Ipv4 adressing scheme
+=====================
+
+Staff 100 users	:192.168.0.0/25
+Sales 50 users 	:192.168.0.128/26
+IT 25 users 		:192.168.0.192/27
+Guest 25 users 	:192.168.1.0/27
+
+Router 1 configuration
+======================
+en 
+conf t
+hostname R1
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+security password min-length 10
+service password-encryption
+banner motd #Authorized access only#
+ipv6 unicast-routing
+
+int G0/0
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:acad::1/64
+ip address 192.168.0.1 255.255.255.128
+no sh
+exit 
+
+int G0/1
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:acad:1::1/64
+ip address 192.168.0.129 255.255.255.192
+no sh
+exit 
+
+int G0/2
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:acad:2::1/64
+ip address 192.168.0.193 255.255.255.224
+no sh
+exit 
+
+int s0/0/1
+ipv6 address fe80::1  link-local
+ipv6 address 2001:db8:2::1/64
+ip address 172.16.1.2 255.255.255.252
+no sh
+exit 
+
+ip domain-name CCNA-lab.com
+crypto key generate rsa 
+
+1024
+
+
+line vty 0 4
+transport input ssh
+login local
+exec-timeout 5
+exit 
+
+username Admin1 secret Admin1pa55
+login block-for 180 attempts 4 within 120
+
+exit
+
+Switch 1 configuration
+======================
+en 
+conf t
+hostname S1
+
+int Vlan1 
+ip address 192.168.0.2 255.255.255.128
+no sh
+exit
+
+ip default-gateway 192.168.0.1
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+line vty 0 15
+password  Ciscoconpa55
+login 
+exec-timeout 5
+exit 
+
+service password-encryption 
+
+
+Switch 2 configuration
+======================
+en 
+conf t
+hostname S2
+
+int Vlan1 
+ip address 192.168.0.130 255.255.255.192
+no sh
+exit
+
+ip default-gateway 192.168.0.129
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+line vty 0 15
+password  Ciscoconpa55
+login 
+exec-timeout 5
+exit 
+
+service password-encryption 
+
+Switch 3 configuration
+======================
+en 
+conf t
+hostname S3
+
+service password-encryption 
+
+int Vlan1 
+ip address 192.168.0.194 255.255.255.224
+no sh
+exit
+
+ip default-gateway 192.168.0.193 
+no ip domain-lookup
+enable secret Ciscoenpa55
+
+line console 0
+password  Ciscoconpa55
+login
+exec-timeout 5
+exit
+
+line vty 0 15
+password  Ciscoconpa55
+login 
+exec-timeout 5
+exit 
+
+exit
+

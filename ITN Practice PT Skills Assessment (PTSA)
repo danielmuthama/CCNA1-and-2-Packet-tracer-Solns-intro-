@@ -1,0 +1,155 @@
+******************** ITN Practice PT Skills Assessment (PTSA) ********************
+
+Ipv4 Addressing Scheme
+======================
+Subnet Number	|	Hosts Available	|	Network address	|		Mask		|	Assignement	|
+	1			30			192.168.1.0			255.255.255.224
+	2			30			192.168.1.32			255.255.255.224
+	3			30			192.168.1.64			255.255.255.224
+	4			30			192.168.1.96			255.255.255.224	    IT Department LAN
+	5			14			192.168.1.128			255.255.255.240
+	6			14			192.168.1.144			255.255.255.240	    Administration LAN
+	
+PC configurations
+=================
+#To configure, clik on the selected device, go to Desktop>IP configuration
+
+*Host 1
+
+IPv4 Address		: 192.168.1.97
+IPv4 Subnet mask	: 255.255.255.224
+IPv4 Default gateway	: 192.168.1.126
+
+IPv6 Address		: 2001:DB8:ACAD:A::FF/64
+IPv6 Default gateway	: FE80::1
+
+*Host 2
+
+IPv4 Address		: 192.168.1.98
+IPv4 Subnet mask	: 255.255.255.224
+IPv4 Default gateway	: 192.168.1.126
+
+IPv6 Address		: 2001:DB8:ACAD:A::15/64
+IPv6 Default gateway	: FE80::1
+	
+*Host 3
+
+IPv4 Address		: 192.168.1.145
+IPv4 Subnet mask	: 255.255.255.240
+IPv4 Default gateway	: 192.168.1.158
+
+IPv6 Address		: 2001:DB8:ACAD:B::FF/64
+IPv6 Default gateway	: FE80::1
+
+*TFTP Server
+
+IPv4 Address		: 192.168.1.146
+IPv4 Subnet mask	: 255.255.255.240
+IPv4 Default gateway	: 192.168.1.158
+
+IPv6 Address		: 2001:DB8:ACAD:B::15/64
+IPv6 Default gateway	: FE80::1
+
+Building 1 router configuration
+===============================
+#To configure the router, you need to use a console cable.
+#Select it from the lower left corner , COnnections -> Console
+#Connect Host 1 and Building 1
+#On Host 1, go to “Desktop ” –> “Terminal”
+
+en
+conf terminal
+hostname Middle
+
+enable secret class12345
+service password-encryption
+banner motd #Authorized Access only#
+
+security passwords min-length 10
+login block-for 120 attempts 2 within 30
+
+no ip domain-lookup
+ip domain-name CCNA-lab.com
+
+crypto key generate rsa
+1024
+
+ipv6 unicast-routing
+
+line console 0
+password cisco12345
+login
+exec-timeout 60
+exit
+
+line vty 0 4
+password cisco12345
+transport input ssh
+login local
+exec-timeout 60
+exit
+
+line aux 0
+password cisco12345
+login
+exec-timeout 60
+exit
+
+
+username netadmin privilege 15 secret Cisco_CCNA5
+
+interface g0/0
+ip address 192.168.1.126 255.255.255.224
+description First Floor LAN
+ipv6 address 2001:DB8:ACAD:A::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+exit
+
+interface g0/1
+ip address 192.168.1.158 255.255.255.240
+description Second Floor LAN
+ipv6 address 2001:DB8:ACAD:B::1/64
+ipv6 address fe80::1 link-local
+no shutdown
+exit
+
+copy running-config tftp: 
+192.168.1.146
+
+
+exit
+
+Second Floor switch configuration
+=================================
+#Connect the switch with a console cable to Host 1
+
+enable
+conf terminal
+
+enable secret class12345
+service password-encryption
+banner motd #aUTHORIZED ACCESS ONLY!#
+no ip domain-lookup
+
+line console 0
+password cisco12345
+login
+exec-timeout 60
+exit
+
+line vty 0 15
+password cisco12345
+login
+exec-timeout 60
+exit
+
+interface vlan 1
+ip address 192.168.1.157 255.255.255.240
+no shutdown
+
+ip default-gateway 192.168.1.158
+exit
+
+
+	

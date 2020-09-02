@@ -1,0 +1,45 @@
+*************2.5.5-packet-tracer---configure-initial-switch-settings***********
+
+Switch 1 configuration
+======================
+enable 
+configure terminal
+		
+hostname S1	
+line console 0			
+password letmein		
+login	
+exit 
+
+enable password c1$c0
+enable secret itsasecret
+service password-encryption
+banner motd #This is a secure system. Authorized Access Only!#
+exit
+	
+copy running-config startup-config				
+
+exit
+
+
+Switch 2 configuration
+======================
+enable 
+configure terminal
+		
+hostname S2	
+line console 0			
+password letmein		
+login	
+exit 
+
+enable password c1$c0
+enable secret itsasecret
+service password-encryption
+banner motd #This is a secure system. Authorized Access Only!#
+exit
+	
+copy running-config startup-config				
+
+exit
+

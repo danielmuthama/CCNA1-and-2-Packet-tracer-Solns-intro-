@@ -1,0 +1,39 @@
+**************10.3.5-packet-tracer---troubleshoot-default-gateway-issues**************
+
+PC misconfigurations
+====================
+*PC1
+change the ip address to 192.168.10.10 #Double-click on PC1 then go to Desktop>IP configuration
+
+*PC4
+change the gateway to 192.168.11.1	#Double-click on PC4 then go to Desktop>IP configuration
+
+Switch misconfigurations
+========================
+*Switch 1			
+#The switch does not have a configured default gateway,therefore there is no connectivity between the 2 subnets.
+
+en					#to enter privileged EXEC mode.Short for "enable"
+sh run					#to verify the missing gateway,look under "interface Vlan1"
+
+conf t					#To enter configuration mode.Short for "configure terminal"
+ip default-gateway 192.168.10.1	#To configure the default gateway.
+
+sh run					#To verify that the gateway is now present. You can also try pinging
+
+
+*Switch 2
+#The switch does not have a configured ip address.
+en					#to enter privileged EXEC mode.Short for "enable"
+sh run					#to verify the missing ip address,look under "interface Vlan1"
+
+conf t					#To enter configuration mode.Short for "configure terminal"
+
+int vlan 1				#To enter the Interface Configuration context for Vlan 1
+ip address 192.168.11.2 255.255.255.0	#To configure an  ip address,to perform switch management over the network
+no sh 					#To turn on interface.Short for no shutdown.
+
+
+
+
+

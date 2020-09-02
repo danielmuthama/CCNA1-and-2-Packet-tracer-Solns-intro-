@@ -1,0 +1,70 @@
+*************2.9.1-packet-tracer---basic-switch-and-end-device-configuration*************
+
+Switch "Class-A" Configuration
+==============================
+en
+conf t
+hostname Class-A
+
+line vty 0 15
+password 8ubRu
+login
+
+line console 0
+password 8ubRu
+login
+exit 
+
+enable secret C9WrE
+service password-encryption
+banner motd #Autorized access only#
+
+conf t
+interface Vlan 1 
+ip address 172.16.5.35 255.255.255.0
+no shutdown
+exit
+
+exit
+
+copy running-conf startup-conf
+
+Switch "Class-B" Configuration
+==============================
+
+en
+conf t
+hostname Class-B
+
+line vty 0 15
+password 8ubRu
+login
+
+line console 0
+password 8ubRu
+login
+exit 
+
+enable secret C9WrE
+service password-encryption
+banner motd #Autorized access only#
+
+interface Vlan 1 
+ip address 172.16.5.40 255.255.255.0
+no shutdown
+exit
+
+exit
+
+copy running-conf startup-conf
+
+
+Computer "Student-1" configuration
+==================================
+ip address 	:172.16.5.50
+subnet mask	:255.255.255.0
+
+Computer "Student-2" configuration
+==================================
+ip address 	:172.16.5.60
+subnet mask	:255.255.255.0

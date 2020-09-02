@@ -1,0 +1,81 @@
+*************2.9.1-packet-tracer---basic-switch-and-end-device-configuration*************
+
+Switch "Class-A" Configuration
+==============================
+#To configure the switch via console , go to connections (lower left corner) ,click on console . 
+#Plug the cable to the console port of the switch and the other end to the "RS 232" of one of the computers.
+#Now click on the computer you've selected go to ,Desktop>Terminal
+
+en					#to enter privileged EXEC mode.Short for "enable"
+conf t					#To enter configuration mode.Short for "configure terminal"
+hostname Class-A			#To configure the switch name
+
+line vty 0 15				#To specify the vty from 0 to 15 for configuration
+password 8ubRu				#To set the password 
+login					#To enable login
+
+line console 0				#To specify the line console 0 for configuration
+password 8ubRu				#To set the password
+login					#To enable login
+exit 					#To go back to configuration mode
+
+enable secret C9WrE			#To configure an encrypted password for secure access to privileged mode
+service password-encryption	       #To encrypt plain text passwords
+banner motd #Autorized access only#   #To configure a warning message that displays when an user tries to log in
+
+conf t					#To enter configuration mode.Short for "configure terminal"
+
+interface Vlan 1 			#To enter the Interface Configuration context for Vlan 1
+ip address 172.16.5.35 255.255.255.0	#To configure an  ip address,to perform switch management over the network
+no shutdown				#To turn on interface
+exit					#To go back to configuration mode
+
+exit					#To go back to privileged EXEC mode
+
+copy running-conf startup-conf	#To back up the running configuration file to NVRAM 
+
+Switch "Class-B" Configuration
+==============================
+
+en					#Same as switch 1
+conf t
+hostname Class-B
+
+line vty 0 15
+password 8ubRu
+login
+
+line console 0
+password 8ubRu
+login
+exit 
+
+enable secret C9WrE
+service password-encryption
+banner motd #Autorized access only#
+
+interface Vlan 1 
+ip address 172.16.5.40 255.255.255.0
+no shutdown
+exit
+
+exit
+
+copy running-conf startup-conf
+
+
+Computer "Student-1" configuration
+==================================
+#To apply ip configuration to the computer, go to Desktop>IP configuration
+
+ip address 	:172.16.5.50
+subnet mask	:255.255.255.0
+
+Computer "Student-2" configuration
+==================================
+#To apply ip configuration to the computer, go to Desktop>IP configuration
+
+ip address 	:172.16.5.60
+subnet mask	:255.255.255.0
+
+
